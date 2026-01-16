@@ -61,7 +61,9 @@ void part1() {
 
   // Q1: The following line is an example. Feel free to
   // copy and/or modify it as needed for part 1 of this lab.
-  printf("x & x = %i\n %x", x & x, &x);
+  
+  printf("x & x = %d\n&x = %p\n", x & x, (void*)&x);
+
 }
 
 // HELPER FUNCTION - fillArray()
@@ -108,6 +110,8 @@ void part2() {
 
   // Q2.1: What happens if the second argument is greater
   // than the size of the array (10)?
+  // if the second argument is greater than the size of the array the program will write past the array size causing undefined behavior such as memory corruption 
+  // and that is because c does not perform boundery checking and it is the programmer resposibility to ensure correct size is passed.
   fillArray(array, 10);
 
   int value = 295;
@@ -121,6 +125,7 @@ void part2() {
   // as if it were an array of a single element. What data
   // is stored in value after the following code executes?
   // Explain why the result is what it is.
+  // the data stored in value is 2, becuase the address of value is passed to fillArray so now we have a pointer holding the address of value representing an array of size one, in the first interation the data of value will be changed array[i] = i*3 +2 ,i = 0 so data of value equal to 2
   fillArray(&value, 1);
 }
 
@@ -184,7 +189,7 @@ void part3() {
   // Order of operations can be confusing, so parentheses
   // generally improve readability.
 
-  // assert( student == 8 );
+   assert(((int*)&student)[2] == 8);
 }
 
 // HELPER FUNCTION - bigArrayIndex()
@@ -220,6 +225,7 @@ void part4() {
   // Q4.1: Try changing the order of the loops (switch the
   // "for" lines). The original ordering below is
   // considered "ijk".  Which loop orderings are fastest?
+  // ijk
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
       for (int k = 0; k < SIZE; k++) {
@@ -227,6 +233,56 @@ void part4() {
       }
     }
   }
+  // ijk is most probably the fastest
+  //Approximate runtime = 263737 
+  // ikj
+//   for (int i = 0; i < SIZE; i++) {
+//   for (int k = 0; k < SIZE; k++) {
+//     for (int j = 0; j < SIZE; j++) {
+//       bigArray[bigArrayIndex(i, j, k)] = i + j + k;
+//     }
+//   }
+// }
+// Approximate runtime = 268991
+// // jik
+// for (int j = 0; j < SIZE; j++) {
+//   for (int i = 0; i < SIZE; i++) {
+//     for (int k = 0; k < SIZE; k++) {
+//       bigArray[bigArrayIndex(i, j, k)] = i + j + k;
+//     }
+//   }
+// }
+// Approximate runtime = 267549
+
+//jki
+// for (int j = 0; j < SIZE; j++) {
+//   for (int k = 0; k < SIZE; k++) {
+//     for (int i = 0; i < SIZE; i++) {
+//       bigArray[bigArrayIndex(i, j, k)] = i + j + k;
+//     }
+//   }
+// }
+// pproximate runtime = 266822
+// kij
+// for (int k = 0; k < SIZE; k++) {
+//   for (int i = 0; i < SIZE; i++) {
+//     for (int j = 0; j < SIZE; j++) {
+//       bigArray[bigArrayIndex(i, j, k)] = i + j + k;
+//     }
+//   }
+// }
+// Approximate runtime = 268569
+// kji
+// for (int k = 0; k < SIZE; k++) {
+//   for (int j = 0; j < SIZE; j++) {
+//     for (int i = 0; i < SIZE; i++) {
+//       bigArray[bigArrayIndex(i, j, k)] = i + j + k;
+//     }
+//   }
+// }
+// Approximate runtime = 270841
+
+
 
   // stop timer and print result
   printf("Approximate runtime = %d\n", (int)(clock() - timer));
@@ -261,6 +317,10 @@ void part5() {
   // use memory, which is often invaluable for C and
   // C++ programming.
   free(class_grades);
+  // when free(class_grades) is used 
+  // All heap blocks were freed -- no leaks are possible
+  // When free(class_grades) is not used
+  // LEAK SUMMARY:   definitely lost: 80 bytes in 1 blocks
 }
 
 // main() is the entry point of the program. It has two
